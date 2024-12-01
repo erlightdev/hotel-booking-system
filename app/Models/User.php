@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -34,6 +35,7 @@ class User extends Model
      */
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
     /**
@@ -45,6 +47,7 @@ class User extends Model
         'id' => 'integer',
         'email_verified_at' => 'timestamp',
         'last_login_at' => 'timestamp',
+        'password' => 'hashed',
     ];
 
     public function bookings(): HasMany
