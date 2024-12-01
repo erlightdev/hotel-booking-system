@@ -1,5 +1,141 @@
 models:
-  # ...
+  User:
+    soft_deletes: true
+    attributes:
+      name: string
+      email: string unique
+      phone: string nullable
+      email_verified_at: timestamp nullable
+      password: string
+      avatar: string nullable
+      role: enum('guest', 'admin', 'staff') default('guest')
+      last_login_at: timestamp nullable
+    relationships:
+      has_many: Booking, Review, SystemLog
 
-controllers:
-  # ...
+  Hotel:
+    soft_deletes: true
+    attributes:
+      name: string
+      description: text nullable
+      address: string
+      city: string
+      state: string
+      country: string
+      total_rooms: integer
+      star_rating: float nullable
+      amenities: json nullable
+      contact_email: string
+      contact_phone: string
+      is_active: boolean default(true)
+    relationships:
+      has_many: Room, Review, SystemLog
+
+  Room:
+    soft_deletes: true
+    attributes:
+      hotel_id: foreignId
+      room_number: string
+      type: enum('single', 'double', 'suite', 'family', 'deluxe')
+      max_occupancy: integer
+      base_price: decimal(10,2)
+      is_available: boolean default(true)
+      description: text nullable
+      amenities: json nullable
+    relationships:
+      belongs_to: Hotel
+      has_many: Booking, SystemLog
+
+  Booking:
+    soft_deletes: true
+    attributes:
+      user_id: foreignId
+      room_id: foreignId
+      check_in_date: date
+      check_out_date: date
+      total_guests: integer
+      total_price: decimal(10,2)
+      status: enum('pending', 'confirmed', 'checked_in', 'checked_out', 'cancelled') default('pending')
+      special_requests: text nullable
+      booking_reference: string unique
+    relationships:
+      belongs_to: User, Room
+      has_one: Payment
+      has_many: SystemLog
+
+  SystemLog:
+    soft_deletes: true
+    attributes:
+      user_id: foreignId
+      user_role: enum('guest', 'admin', 'staff')
+      model: string
+      model_id: integer
+      action: enum('create', 'update', 'delete')
+      description: text
+      changed_at: timestamp default(CURRENT_TIMESTAMP)
+    relationships:
+      belongs_to: User
+    indexes:
+      - model
+      - user_id
+      - changed_at
+
+  Payment:
+    soft_deletes: true
+    attributes:
+      booking_id: foreignId
+      amount: decimal(10,2)
+      payment_method: enum('credit_card', 'debit_card', 'paypal', 'bank_transfer', 'cash')
+      transaction_id: string nullable
+      status: enum('pending', 'completed', 'failed') default('pending')
+      paid_at: timestamp nullable
+    relationships:
+      belongs_to: Booking
+
+  Review:
+    soft_deletes: true
+    attributes:
+      user_id: foreignId
+      hotel_id: foreignId
+      rating: float
+      comment: text nullable
+      stayed_at: date
+    relationships:
+      belongs_to: User, Hotel
+
+  Amenity:
+    soft_deletes: true
+    attributes:
+      name: string unique
+      description: text nullable
+      type: enum('hotel', 'room') default('room')
+      icon: string nullable
+
+relationships:
+  - User has_many Booking, Review, SystemLog
+  - Hotel has_many Room, Review, SystemLog
+  - Room has_many Booking, SystemLog
+  - Booking has_many SystemLog
+  - SystemLog belongs_to User
+
+migrations:
+  - create_users_table
+  - create_hotels_table
+  - create_rooms_table
+  - create_bookings_table
+  - create_system_logs_table
+  - create_payments_table
+  - create_reviews_table
+  - create_amenities_table
+
+seeders:
+  - UserSeeder
+  - HotelSeeder
+  - RoomSeeder
+  - AmenitySeeder
+
+additional_configs:
+  - implement soft deletes for data preservation
+  - use enum for controlled value sets
+  - implement unique constraints where necessary
+  - add indexes for foreign keys and frequently queried columns
