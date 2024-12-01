@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\HotelSeeder;
 use Illuminate\Database\Seeder;
 
-class UserSeeder extends Seeder
+class HotelSeederSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        User::factory()->count(5)->create();
+        HotelSeeder::factory()->count(5)->create();
     }
 }

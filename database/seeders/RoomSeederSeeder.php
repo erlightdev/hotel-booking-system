@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\Amenity;
+use App\Models\RoomSeeder;
 use Illuminate\Database\Seeder;
 
-class AmenitySeeder extends Seeder
+class RoomSeederSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Amenity::factory()->count(5)->create();
+        RoomSeeder::factory()->count(5)->create();
     }
 }

@@ -99,9 +99,9 @@ models:
     action: enum:create,update,delete
     description: text
     user_role: enum:guest,admin,staff
-    changed_at: timestamp default:CURRENT_TIMESTAMP
+    changed_at: timestamp
     softDeletes: true
-    timestamps: true
+    timestamps: false
     relationships:
       belongsTo: User
     indexes:
@@ -131,7 +131,7 @@ migrations:
   - create_system_logs_table
   - create_amenities_table
 
-seeders: User, Hotel, Room, Amenity
+seeders: UserSeeder, HotelSeeder, RoomSeeder, AmenitySeeder
 
 additional_configs:
   - implement soft deletes for data preservation

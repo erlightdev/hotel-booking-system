@@ -7,14 +7,14 @@ created:
     - database/factories/ReviewFactory.php
     - database/factories/SystemLogFactory.php
     - database/factories/AmenityFactory.php
-    - database/migrations/2024_12_01_114022_create_users_table.php
-    - database/migrations/2024_12_01_114023_create_hotels_table.php
-    - database/migrations/2024_12_01_114024_create_rooms_table.php
-    - database/migrations/2024_12_01_114025_create_bookings_table.php
-    - database/migrations/2024_12_01_114026_create_payments_table.php
-    - database/migrations/2024_12_01_114027_create_reviews_table.php
-    - database/migrations/2024_12_01_114028_create_system_logs_table.php
-    - database/migrations/2024_12_01_114029_create_amenities_table.php
+    - database/migrations/2024_12_01_115045_create_users_table.php
+    - database/migrations/2024_12_01_115046_create_hotels_table.php
+    - database/migrations/2024_12_01_115047_create_rooms_table.php
+    - database/migrations/2024_12_01_115048_create_bookings_table.php
+    - database/migrations/2024_12_01_115049_create_payments_table.php
+    - database/migrations/2024_12_01_115050_create_reviews_table.php
+    - database/migrations/2024_12_01_115051_create_system_logs_table.php
+    - database/migrations/2024_12_01_115052_create_amenities_table.php
     - app/Models/User.php
     - app/Models/Hotel.php
     - app/Models/Room.php
@@ -23,10 +23,10 @@ created:
     - app/Models/Review.php
     - app/Models/SystemLog.php
     - app/Models/Amenity.php
-    - database/seeders/UserSeeder.php
-    - database/seeders/HotelSeeder.php
-    - database/seeders/RoomSeeder.php
-    - database/seeders/AmenitySeeder.php
+    - database/seeders/UserSeederSeeder.php
+    - database/seeders/HotelSeederSeeder.php
+    - database/seeders/RoomSeederSeeder.php
+    - database/seeders/AmenitySeederSeeder.php
 models:
     User: { id: id, name: 'string:100', email: 'string:150 unique', phone: 'string nullable', password: string, avatar: 'string:255 nullable', role: 'enum:guest,admin,staff default:guest', email_verified_at: 'timestamp nullable', last_login_at: 'timestamp nullable', softdeletes: softDeletes, timestamps: timestamps, relationships: { hasMany: 'Booking, Review, SystemLog' } }
     Hotel: { id: id, name: 'string:100', description: 'text nullable', address: 'string:255', city: 'string:100', state: 'string:100', country: 'string:100', total_rooms: integer, star_rating: 'decimal(3,2) nullable', contact_email: 'string:150', contact_phone: 'string:20', is_active: 'boolean default:true', amenities: 'json nullable', softdeletes: softDeletes, timestamps: timestamps, relationships: { hasMany: 'Room, Review' } }
@@ -34,5 +34,5 @@ models:
     Booking: { id: id, user_id: 'foreignId:users', room_id: 'foreignId:rooms', check_in_date: date, check_out_date: date, total_guests: integer, total_price: 'decimal(10,2)', status: 'enum:pending,confirmed,checked_in,checked_out,cancelled default:pending', booking_reference: 'string:50 unique', special_requests: 'text nullable', softdeletes: softDeletes, timestamps: timestamps, relationships: { belongsTo: 'User, Room', hasOne: Payment } }
     Payment: { id: id, booking_id: 'foreignId:bookings', amount: 'decimal(10,2)', payment_method: 'enum:credit_card,debit_card,paypal,bank_transfer,cash', transaction_id: 'string nullable', status: 'enum:pending,completed,failed default:pending', paid_at: 'timestamp nullable', softdeletes: softDeletes, timestamps: timestamps, relationships: { belongsTo: Booking } }
     Review: { id: id, user_id: 'foreignId:users', hotel_id: 'foreignId:hotels', rating: 'decimal(3,2)', comment: 'text nullable', stayed_at: date, softdeletes: softDeletes, timestamps: timestamps, relationships: { belongsTo: 'User, Hotel' } }
-    SystemLog: { id: id, user_id: 'foreignId:users', model: 'string:100', model_id: integer, action: 'enum:create,update,delete', description: text, user_role: 'enum:guest,admin,staff', changed_at: 'timestamp default:CURRENT_TIMESTAMP', softdeletes: softDeletes, timestamps: timestamps, relationships: { belongsTo: User }, indexes: [{ name: system_log_model_index, columns: [model] }, { name: system_log_user_index, columns: [user_id] }, { name: system_log_changed_at_index, columns: [changed_at] }] }
+    SystemLog: { id: id, user_id: 'foreignId:users', model: 'string:100', model_id: integer, action: 'enum:create,update,delete', description: text, user_role: 'enum:guest,admin,staff', changed_at: timestamp, softdeletes: softDeletes, timestamps: false, relationships: { belongsTo: User }, indexes: [{ name: system_log_model_index, columns: [model] }, { name: system_log_user_index, columns: [user_id] }, { name: system_log_changed_at_index, columns: [changed_at] }] }
     Amenity: { id: id, name: 'string:100 unique', description: 'text nullable', type: 'enum:hotel,room default:room', icon: 'string nullable', softdeletes: softDeletes, timestamps: timestamps }
