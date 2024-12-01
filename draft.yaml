@@ -131,7 +131,7 @@ migrations:
   - create_system_logs_table
   - create_amenities_table
 
-seeders: UserSeeder, HotelSeeder, RoomSeeder, AmenitySeeder
+seeders: User, Hotel, Room, Amenity
 
 additional_configs:
   - implement soft deletes for data preservation
