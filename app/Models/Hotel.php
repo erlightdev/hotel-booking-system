@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Model
+class Hotel extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -18,22 +18,17 @@ class User extends Model
      */
     protected $fillable = [
         'name',
-        'email',
-        'phone',
-        'password',
-        'avatar',
-        'role',
-        'email_verified_at',
-        'last_login_at',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
+        'description',
+        'address',
+        'city',
+        'state',
+        'country',
+        'total_rooms',
+        'star_rating',
+        'contact_email',
+        'contact_phone',
+        'is_active',
+        'amenities',
     ];
 
     /**
@@ -43,22 +38,17 @@ class User extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'email_verified_at' => 'timestamp',
-        'last_login_at' => 'timestamp',
+        'is_active' => 'boolean',
+        'amenities' => 'array',
     ];
 
-    public function bookings(): HasMany
+    public function rooms(): HasMany
     {
-        return $this->hasMany(Booking::class);
+        return $this->hasMany(Room::class);
     }
 
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
-    }
-
-    public function systemLogs(): HasMany
-    {
-        return $this->hasMany(SystemLog::class);
     }
 }
